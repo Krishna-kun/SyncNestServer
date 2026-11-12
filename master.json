@@ -1,0 +1,21 @@
+{
+  "seqCounter": 2,
+  "records": {
+    "TestPhone_1_rec1": {
+      "id": "TestPhone_1_rec1",
+      "content": "{\"title\":\"Test Emergency\",\"body\":\"Water needed at Sector 4\",\"priority\":\"Critical\",\"status\":\"To do\",\"location\":\"Sector 4\"}",
+      "updatedAt": 1700000000000,
+      "deleted": 0,
+      "deviceId": "TestPhone_1",
+      "seq": 1
+    },
+    "Phone_ef7fy5_1794481245176_cwljp": {
+      "id": "Phone_ef7fy5_1794481245176_cwljp",
+      "content": "{\"title\":\"Water supply\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794481245176,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 2
+    }
+  }
+}
