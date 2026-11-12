@@ -70,7 +70,7 @@ let syncQueue = Promise.resolve();
 
 function enqueueSync(task) {
   const run = syncQueue.then(task, task);
-  syncQueue = run.catch(() => {});
+  syncQueue = run.catch(() => { });
   return run;
 }
 
@@ -87,45 +87,30 @@ app.get('/hub-info', (req, res) => {
 });
 
 
-// High-contrast QR connect page (testing Keshav's expected QR formats)
+// High-contrast QR connect page (matches Keshav's exact SyncNest QR contract)
 app.get('/qr', async (req, res) => {
   const ip = getLocalIp();
-  const payloads = [
-    { label: '5. JSON {url}', data: JSON.stringify({ url: `http://${ip}:${PORT}` }) },
-    { label: '6. JSON {server}', data: JSON.stringify({ server: ip }) },
-    { label: '7. JSON {address}', data: JSON.stringify({ address: ip }) },
-    { label: '8. SYNCNEST:ip', data: `SYNCNEST:${ip}` }
-  ];
-
-  const cards = await Promise.all(
-    payloads.map(async (p) => {
-      const img = await QRCode.toDataURL(p.data, { width: 220, margin: 2 });
-      return `
-        <div class="card">
-          <img src="${img}" alt="${p.label}" />
-          <div><strong>${p.label}</strong></div>
-          <code>${p.data}</code>
-        </div>
-      `;
-    })
-  );
+  const qrPayload = JSON.stringify({ app: 'syncnest', ip, port: PORT });
+  const qrImg = await QRCode.toDataURL(qrPayload, { width: 280, margin: 2 });
 
   res.send(`
     <!DOCTYPE html>
     <html>
       <head>
-        <title>SyncNest Hub QR Test</title>
+        <title>SyncNest Hub QR</title>
         <style>
-          body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 32px; text-align: center; }
-          .row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; margin-top: 24px; }
-          .card { background: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; max-width: 260px; }
-          img { background: #ffffff; padding: 10px; border-radius: 10px; display: block; margin: 0 auto 12px; }
-          code { color: #4fd1c5; font-size: 13px; word-break: break-all; }
+          body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+          .card { background: #1e293b; padding: 28px; border-radius: 16px; text-align: center; border: 1px solid #334155; }
+          img { background: #ffffff; padding: 14px; border-radius: 12px; display: block; margin: 0 auto 16px; }
+          code { color: #4fd1c5; font-size: 14px; }
         </style>
       </head>
       <body>
-        <h1>SyncNest QR Format Test</h1>
-        <div class="row">${cards.join('')}</div>
+        <div class="card">
+          <h2>Scan to Connect to SyncNest Hub</h2>
+          <img src="${qrImg}" alt="SyncNest Hub QR" />
+          <code>${qrPayload}</code>
+        </div>
       </body>
     </html>
   `);
@@ -193,19 +178,21 @@ app.post('/sync', async (req, res) => {
 
       const outboundChanges = getChangesSince(master.records, Number(lastSeq));
 
-      const event = {
-        timestamp: new Date().toISOString(),
-        deviceId,
-        receivedCount: changes.length,
-        sentCount: outboundChanges.length
-      };
+      if (changes.length > 0 || outboundChanges.length > 0) {
+        const event = {
+          timestamp: new Date().toISOString(),
+          deviceId,
+          receivedCount: changes.length,
+          sentCount: outboundChanges.length
+        };
 
-      recentEvents.unshift(event);
-      recentEvents = recentEvents.slice(0, 20);
+        recentEvents.unshift(event);
+        recentEvents = recentEvents.slice(0, 20);
 
-      console.log(
-        `[SYNC] ${deviceId} | Uploaded: ${changes.length} | Sent back: ${outboundChanges.length} | Seq: ${master.seqCounter}`
-      );
+        console.log(
+          `[SYNC] ${deviceId} | Uploaded: ${changes.length} | Sent back: ${outboundChanges.length} | Seq: ${master.seqCounter}`
+        );
+      }
 
       return {
         newSeq: master.seqCounter,
@@ -229,5 +216,5 @@ app.listen(PORT, HOST, () => {
   console.log(`Network devices: http://${ip}:${PORT}`);
   console.log('Scan this QR in the SyncNest mobile app:');
   console.log('=========================================');
-  qrcode.generate(ip, { small: true });
+  qrcode.generate(JSON.stringify({ app: 'syncnest', ip, port: PORT }), { small: true });
 });

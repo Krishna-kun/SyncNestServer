@@ -1,21 +1,45 @@
 {
-  "seqCounter": 2,
+  "seqCounter": 8,
   "records": {
     "TestPhone_1_rec1": {
       "id": "TestPhone_1_rec1",
       "content": "{\"title\":\"Test Emergency\",\"body\":\"Water needed at Sector 4\",\"priority\":\"Critical\",\"status\":\"To do\",\"location\":\"Sector 4\"}",
-      "updatedAt": 1700000000000,
-      "deleted": 0,
-      "deviceId": "TestPhone_1",
-      "seq": 1
+      "updatedAt": 1794505496818,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 4
     },
     "Phone_ef7fy5_1794481245176_cwljp": {
       "id": "Phone_ef7fy5_1794481245176_cwljp",
       "content": "{\"title\":\"Water supply\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delhi\"}",
-      "updatedAt": 1794481245176,
+      "updatedAt": 1794505500022,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 3
+    },
+    "Phone_ef7fy5_1794505520097_onsj9": {
+      "id": "Phone_ef7fy5_1794505520097_onsj9",
+      "content": "{\"title\":\"Test_emergency_1\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Ddn\"}",
+      "updatedAt": 1794505520097,
       "deleted": 0,
       "deviceId": "Phone_ef7fy5",
-      "seq": 2
+      "seq": 5
+    },
+    "Phone_ef7fy5_1794505560523_kdps1": {
+      "id": "Phone_ef7fy5_1794505560523_kdps1",
+      "content": "{\"title\":\"Test_emergency_3\",\"body\":\"Abcdef\",\"priority\":\"Medium\",\"status\":\"Done\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794506677939,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 8
+    },
+    "Phone_ef7fy5_1794506669414_sayh0": {
+      "id": "Phone_ef7fy5_1794506669414_sayh0",
+      "content": "{\"title\":\"Test sub\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794506669414,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 7
     }
   }
 }
