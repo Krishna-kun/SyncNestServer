@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SyncNest PC Hub · Mission Control</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Outer Full-Viewport Container (96vw, max 1480px, #0A0D12, 1px checks grid) -->
+  <div class="hub-container">
+    <!-- Header -->
+    <header class="hub-header">
+      <div class="header-left">
+        <img src="logo.png" alt="SyncNest Logo" class="hub-logo" />
+        <div class="brand-text-block">
+          <div class="brand-row">
+            <h1 class="brand-title">SyncNest</h1>
+            <span class="micro-pill sky-pill">LOCAL MESH · :3000</span>
+          </div>
+          <p class="hub-subtitle">PC HUB · ZERO-INTERNET LOCAL MESH</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="open-connect-btn" class="pill-btn connect-pill-btn" type="button">
+          <svg class="icon-inline" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1zM11 12a1 1 0 011-1h1a1 1 0 011 1v1h1a1 1 0 011 1v2a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1h-1a1 1 0 01-1-1v-2z" clip-rule="evenodd" />
+          </svg>
+          Connect Device
+        </button>
+        <div class="hub-online-pill">
+          <span class="radar-dot"></span>
+          <span>Hub Online · LAN</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 4 KPI Cards -->
+    <section class="kpi-grid">
+      <!-- KPI 1: RECORDS -->
+      <div class="kpi-card" id="card-kpi-records">
+        <div class="kpi-card-header">
+          <span class="kpi-label">RECORDS</span>
+          <span class="kpi-pill-badge active-pill">Active</span>
+        </div>
+        <div class="kpi-card-main">
+          <span class="kpi-number" id="kpi-records">0</span>
+        </div>
+        <div class="kpi-card-footer">
+          <span>Active emergency records</span>
+        </div>
+      </div>
+
+      <!-- KPI 2: DEVICES ONLINE -->
+      <div class="kpi-card" id="card-kpi-devices">
+        <div class="kpi-card-header">
+          <span class="kpi-label">DEVICES ONLINE</span>
+          <span class="kpi-live-dot"></span>
+        </div>
+        <div class="kpi-card-main kpi-device-flex">
+          <span class="kpi-number" id="kpi-devices">1</span>
+        </div>
+        <div class="kpi-card-footer">
+          <span id="kpi-devices-caption">1 Hub + 0 Phones</span>
+        </div>
+      </div>
+
+      <!-- KPI 3: LAST SYNC -->
+      <div class="kpi-card" id="card-kpi-sync">
+        <div class="kpi-card-header">
+          <span class="kpi-label">LAST SYNC</span>
+          <span class="kpi-pill-badge mesh-pill">Realtime</span>
+        </div>
+        <div class="kpi-card-main kpi-waveform-row">
+          <span class="kpi-number kpi-time-text" id="kpi-last-sync">Just now</span>
+          <svg id="heartbeat-svg" class="heartbeat-svg" viewBox="0 0 110 24" preserveAspectRatio="none">
+            <path class="heartbeat-path" d="M 0 12 L 32 12 L 40 3 L 48 21 L 54 7 L 62 16 L 68 12 L 110 12" />
+          </svg>
+        </div>
+        <div class="kpi-card-footer">
+          <span>Waveform pulses on mobile sync</span>
+        </div>
+      </div>
+
+      <!-- KPI 4: SERVER SEQ -->
+      <div class="kpi-card" id="card-kpi-seq">
+        <div class="kpi-card-header">
+          <span class="kpi-label">SERVER SEQ</span>
+          <span class="amber-pill">LWW Merge</span>
+        </div>
+        <div class="kpi-card-main">
+          <span class="kpi-number" id="kpi-seq">0</span>
+        </div>
+        <div class="kpi-card-footer">
+          <span id="kpi-versions-count">0 saved versions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Search & Priority Filter Bar -->
+    <section class="filter-bar">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+        <input
+          id="search-input"
+          class="search-input"
+          type="text"
+          placeholder="Search cards by title, details, location, or device..."
+          autocomplete="off"
+        />
+      </div>
+      <div class="filter-pills" id="priority-filters">
+        <button class="filter-pill active" data-priority="ALL" type="button">All Priorities</button>
+        <button class="filter-pill pill-p-critical" data-priority="Critical" type="button">Critical</button>
+        <button class="filter-pill pill-p-high" data-priority="High" type="button">High</button>
+        <button class="filter-pill pill-p-medium" data-priority="Medium" type="button">Medium</button>
+        <button class="filter-pill pill-p-low" data-priority="Low" type="button">Low</button>
+      </div>
+    </section>
+
+    <!-- Main 3-Column Workspace -->
+    <main class="workspace-grid">
+      <!-- Left Column: DEVICES -->
+      <aside class="panel devices-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <svg class="panel-icon" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2 3a1 1 0 011-1h14a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3zm2 2v6h12V5H4zm-2 11a1 1 0 011-1h14a1 1 0 110 2H3a1 1 0 01-1-1z" />
+            </svg>
+            <h2>DEVICES</h2>
+          </div>
+          <span class="pill-count" id="device-count">1</span>
+        </div>
+        <p class="devices-subhint">Click device for telemetry & sync history</p>
+        <div id="devices-list" class="devices-list">
+          <!-- Filled dynamically by dashboard.js -->
+        </div>
+      </aside>
+
+      <!-- Center Column: Scrollable Kanban (Top: TO DO & DOING side-by-side, Bottom: DONE) -->
+      <section class="panel kanban-section">
+        <!-- Top Row: TO DO & DOING side-by-side -->
+        <div class="kanban-top-row">
+          <!-- TO DO Box -->
+          <div class="kanban-box" id="box-todo">
+            <div class="kanban-box-header">
+              <div class="box-title-group">
+                <span class="kanban-marker marker-todo"></span>
+                <h2>TO DO</h2>
+              </div>
+              <span class="pill-count count-todo-pill" id="count-todo">0</span>
+            </div>
+            <div id="col-todo" class="col-cards"></div>
+          </div>
+
+          <!-- DOING Box -->
+          <div class="kanban-box" id="box-doing">
+            <div class="kanban-box-header">
+              <div class="box-title-group">
+                <span class="kanban-marker marker-doing"></span>
+                <h2>DOING</h2>
+              </div>
+              <span class="pill-count count-doing-pill" id="count-doing">0</span>
+            </div>
+            <div id="col-doing" class="col-cards"></div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: DONE Box (Full Width) -->
+        <div class="kanban-bottom-row">
+          <div class="kanban-box kanban-box-done" id="box-done">
+            <div class="kanban-box-header">
+              <div class="box-title-group">
+                <span class="kanban-marker marker-done"></span>
+                <h2>DONE</h2>
+              </div>
+              <span class="pill-count count-done-pill" id="count-done">0</span>
+            </div>
+            <div id="col-done" class="col-cards col-cards-done"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: syncnest@hub:~/logs macOS Terminal Window -->
+      <aside class="panel terminal-window">
+        <div class="terminal-titlebar">
+          <div class="traffic-lights">
+            <span class="tl tl-red"></span>
+            <span class="tl tl-yellow"></span>
+            <span class="tl tl-green"></span>
+          </div>
+          <span class="terminal-title">syncnest@hub:~/logs</span>
+          <span class="poll-tag">2s</span>
+        </div>
+        <div class="terminal-body">
+          <div id="activity-feed" class="terminal-feed">
+            <!-- Dynamically populated from /status recentEvents -->
+          </div>
+          <div class="term-cursor-line">
+            <span class="term-prompt">syncnest@hub:~$</span>
+            <span class="blinking-block-cursor">█</span>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- 1. Connect Device Modal (IP & QR hidden until clicked) -->
+  <div id="connect-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card glassmorphic-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge sky-badge">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1zM11 12a1 1 0 011-1h1a1 1 0 011 1v1h1a1 1 0 011 1v2a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1h-1a1 1 0 01-1-1v-2z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h2>Connect Field Phone</h2>
+        </div>
+        <button id="close-connect-btn" class="close-btn" type="button" aria-label="Close modal">&times;</button>
+      </div>
+
+      <p class="modal-desc">Connect phone to the same Wi-Fi / Hotspot network, then scan this QR code in the SyncNest app.</p>
+      
+      <div class="qr-container">
+        <div class="qr-box">
+          <img id="modal-qr-img" src="" alt="SyncNest QR Code" />
+        </div>
+      </div>
+
+      <div class="modal-ip-row">
+        <div class="ip-info-box">
+          <span class="ip-label">HUB LOCAL URL</span>
+          <code id="modal-hub-url">Loading...</code>
+        </div>
+        <button id="copy-ip-btn" class="copy-btn" type="button">Copy URL</button>
+      </div>
+      <div class="modal-footer-note">
+        <span>Offline Local Mesh · Port :3000 · Zero CDNs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Device Details Modal (Glassmorphic) -->
+  <div id="device-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-medium glassmorphic-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge emerald-badge">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7 2a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V4a2 2 0 00-2-2H7zm3 14a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <h2 id="devmodal-title">Device Details</h2>
+            <span class="modal-subtitle" id="devmodal-subtitle">Mesh Node Telemetry</span>
+          </div>
+        </div>
+        <button id="close-device-btn" class="close-btn" type="button" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="device-modal-body">
+        <div class="telemetry-grid">
+          <div class="telemetry-tile">
+            <span class="tel-label">DEVICE ID</span>
+            <code class="tel-code" id="devmodal-id">—</code>
+          </div>
+          <div class="telemetry-tile">
+            <span class="tel-label">ROLE</span>
+            <span class="tel-val" id="devmodal-role">—</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="tel-label">STATUS</span>
+            <div class="tel-status-flex">
+              <span class="status-dot online"></span>
+              <span class="tel-val" id="devmodal-status">Online · Active</span>
+            </div>
+          </div>
+          <div class="telemetry-tile">
+            <span class="tel-label">LAST SYNC TIME</span>
+            <span class="tel-val" id="devmodal-lastseen">—</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="tel-label">TOTAL RECORDS OWNED</span>
+            <span class="tel-val tel-num" id="devmodal-records">0</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="tel-label">TOTAL VERSIONS PUSHED</span>
+            <span class="tel-val tel-num" id="devmodal-versions">0</span>
+          </div>
+        </div>
+
+        <div class="device-history-section">
+          <h3>Recent Sync Events</h3>
+          <div class="device-events-list" id="devmodal-events">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Version History Modal (Glassmorphic) -->
+  <div id="version-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card modal-card-medium glassmorphic-modal">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge sky-badge">
+            <svg viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <h2 id="vermodal-title">Version History</h2>
+            <span class="modal-subtitle" id="vermodal-subtitle">Deterministic LWW Snapshots</span>
+          </div>
+        </div>
+        <button id="close-version-btn" class="close-btn" type="button" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="version-modal-body">
+        <div class="ver-meta-bar">
+          <span class="ver-record-id" id="vermodal-recid">—</span>
+          <span class="ver-count-badge" id="vermodal-count">0 snapshots</span>
+        </div>
+        <div class="version-timeline" id="vermodal-timeline">
+          <!-- Timeline entries populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Sync Toast Notification -->
+  <div id="sync-toast" class="sync-toast hidden"></div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

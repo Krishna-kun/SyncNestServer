@@ -5,12 +5,16 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const qrcode = require('qrcode-terminal');
-const { mergeChanges, getChangesSince } = require('./sync-core');
 const QRCode = require('qrcode')
 const app = express();
-
+const {
+  mergeChanges,
+  getChangesSince,
+  mergeVersions,
+  getVersionsSince
+} = require('./sync-core');
 // CONNECTION POINT: Local port configuration (Default: 3000, Host: '0.0.0.0', Accessible at http://192.168.1.9:3000)
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 const HOST = '0.0.0.0';
 
 // CONNECTION POINT: Path to master database file (Default: './master.json')
@@ -38,11 +42,27 @@ function getLocalIp() {
 // In-memory state loaded from master.json
 let master = {
   seqCounter: 0,
-  records: {}
+  records: {},
+  versions: {},
+  versionSeqCounter: 0
 };
 
-let recentEvents = [];
+const deviceLastSeen = {};
 const activeDevices = new Set();
+let recentEvents = [
+  {
+    timestamp: new Date().toISOString(),
+    deviceId: 'Laptop-PC',
+    type: 'SYS',
+    message: 'Local mesh initialized on port 3000'
+  },
+  {
+    timestamp: new Date().toISOString(),
+    deviceId: 'Laptop-PC',
+    type: 'OK',
+    message: 'Deterministic LWW merge engine ready'
+  }
+];
 
 // Load existing master.json on startup
 if (fs.existsSync(DB_FILE)) {
@@ -51,8 +71,23 @@ if (fs.existsSync(DB_FILE)) {
     const parsed = JSON.parse(raw);
     master = {
       seqCounter: Number(parsed.seqCounter || 0),
-      records: parsed.records || {}
+      records: parsed.records || {},
+      versions: parsed.versions || {},
+      versionSeqCounter: Number(parsed.versionSeqCounter || 0)
     };
+    if (master.records) {
+      for (const rec of Object.values(master.records)) {
+        if (rec && rec.deviceId) {
+          activeDevices.add(rec.deviceId);
+          if (rec.updatedAt) {
+            deviceLastSeen[rec.deviceId] = Math.max(
+              deviceLastSeen[rec.deviceId] || 0,
+              Number(rec.updatedAt)
+            );
+          }
+        }
+      }
+    }
   } catch (err) {
     console.error('Failed to load master.json, starting fresh:', err.message);
   }
@@ -77,12 +112,21 @@ function enqueueSync(task) {
 // ---------------- API ENDPOINTS ----------------
 
 // Hub network info (used by dashboard & QR display)
-app.get('/hub-info', (req, res) => {
+app.get('/hub-info', async (req, res) => {
   const ip = getLocalIp();
+  const qrPayload = JSON.stringify({ app: 'syncnest', ip, port: PORT });
+  let qrDataUrl = '';
+  try {
+    qrDataUrl = await QRCode.toDataURL(qrPayload, { width: 280, margin: 2 });
+  } catch (err) {
+    console.error('Error generating QR for hub-info:', err.message);
+  }
   res.json({
     ip,
     port: PORT,
-    url: `http://${ip}:${PORT}`
+    url: `http://${ip}:${PORT}`,
+    qrDataUrl,
+    qrPayload
   });
 });
 
@@ -128,6 +172,7 @@ app.get('/status', (req, res) => {
     seqCounter: master.seqCounter,
     totalRecords: activeRecords.length,
     activeDevices: Array.from(activeDevices),
+    deviceLastSeen,
     recentEvents
   });
 });
@@ -140,10 +185,14 @@ app.get('/records', (req, res) => {
   res.json(activeRecords);
 });
 
+app.get('/versions', (req, res) => {
+  res.json(Object.values(master.versions || {}));
+});
+
 // Sync endpoint called by Keshav's React Native app
 app.post('/sync', async (req, res) => {
   try {
-    const { deviceId, lastSeq = 0, changes = [] } = req.body || {};
+    const { deviceId, lastSeq = 0, changes = [], versions = [], lastVersionSeq = 0 } = req.body || {};
 
     if (
       typeof deviceId !== 'string' ||
@@ -164,6 +213,7 @@ app.post('/sync', async (req, res) => {
 
     const result = await enqueueSync(async () => {
       activeDevices.add(deviceId);
+      deviceLastSeen[deviceId] = Date.now();
 
       const { updatedMasterMap, newSeqCounter } = mergeChanges(
         master.records,
@@ -173,21 +223,36 @@ app.post('/sync', async (req, res) => {
 
       master.records = updatedMasterMap;
       master.seqCounter = newSeqCounter;
-
+      const incomingVersions = Array.isArray(versions) ? versions : [];
+      const { updatedVersionMap, newVersionSeqCounter } = mergeVersions(
+        master.versions || {},
+        incomingVersions,
+        master.versionSeqCounter || 0
+      );
+      master.versions = updatedVersionMap;
+      master.versionSeqCounter = newVersionSeqCounter;
       saveMaster();
 
       const outboundChanges = getChangesSince(master.records, Number(lastSeq));
+      
+      const outboundVersions = getVersionsSince(
+        master.versions,
+        Number(lastVersionSeq)
+      );
 
-      if (changes.length > 0 || outboundChanges.length > 0) {
+      if (changes.length > 0 || outboundChanges.length > 0 || incomingVersions.length > 0 || outboundVersions.length > 0) {
+        const eventType = changes.length > 0 ? 'SYNC' : (incomingVersions.length > 0 ? 'VER' : 'SYNC');
         const event = {
           timestamp: new Date().toISOString(),
           deviceId,
+          type: eventType,
           receivedCount: changes.length,
-          sentCount: outboundChanges.length
+          sentCount: outboundChanges.length,
+          versionsCount: incomingVersions.length
         };
 
         recentEvents.unshift(event);
-        recentEvents = recentEvents.slice(0, 20);
+        recentEvents = recentEvents.slice(0, 30);
 
         console.log(
           `[SYNC] ${deviceId} | Uploaded: ${changes.length} | Sent back: ${outboundChanges.length} | Seq: ${master.seqCounter}`
@@ -196,7 +261,9 @@ app.post('/sync', async (req, res) => {
 
       return {
         newSeq: master.seqCounter,
-        changes: outboundChanges
+        changes: outboundChanges,
+        newVersionSeq: master.versionSeqCounter,
+        versions: outboundVersions
       };
     });
 

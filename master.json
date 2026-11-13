@@ -1,5 +1,5 @@
 {
-  "seqCounter": 8,
+  "seqCounter": 20,
   "records": {
     "TestPhone_1_rec1": {
       "id": "TestPhone_1_rec1",
@@ -20,26 +20,309 @@
     "Phone_ef7fy5_1794505520097_onsj9": {
       "id": "Phone_ef7fy5_1794505520097_onsj9",
       "content": "{\"title\":\"Test_emergency_1\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Ddn\"}",
-      "updatedAt": 1794505520097,
-      "deleted": 0,
+      "updatedAt": 1794508502264,
+      "deleted": 1,
       "deviceId": "Phone_ef7fy5",
-      "seq": 5
+      "seq": 13
     },
     "Phone_ef7fy5_1794505560523_kdps1": {
       "id": "Phone_ef7fy5_1794505560523_kdps1",
       "content": "{\"title\":\"Test_emergency_3\",\"body\":\"Abcdef\",\"priority\":\"Medium\",\"status\":\"Done\",\"location\":\"Delhi\"}",
-      "updatedAt": 1794506677939,
-      "deleted": 0,
+      "updatedAt": 1794508512234,
+      "deleted": 1,
       "deviceId": "Phone_ef7fy5",
-      "seq": 8
+      "seq": 15
     },
     "Phone_ef7fy5_1794506669414_sayh0": {
       "id": "Phone_ef7fy5_1794506669414_sayh0",
       "content": "{\"title\":\"Test sub\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794508508495,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 14
+    },
+    "Phone_ef7fy5_1794508358631_zd0ic": {
+      "id": "Phone_ef7fy5_1794508358631_zd0ic",
+      "content": "{\"title\":\"Test-1\",\"body\":\"Abajsb\",\"priority\":\"High\",\"status\":\"To do\",\"location\":\"\"}",
+      "updatedAt": 1794508358631,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 9
+    },
+    "Phone_ef7fy5_1794508376604_2q7u6": {
+      "id": "Phone_ef7fy5_1794508376604_2q7u6",
+      "content": "{\"title\":\"Bahasnnsama\",\"body\":\"Janana\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794508376604,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 10
+    },
+    "Phone_ef7fy5_1794508390222_7lgwg": {
+      "id": "Phone_ef7fy5_1794508390222_7lgwg",
+      "content": "{\"title\":\"Hzhajabab\",\"body\":\"Ishebaaii\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Bsjan\"}",
+      "updatedAt": 1794508390222,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 11
+    },
+    "Phone_ef7fy5_1794508399376_t936r": {
+      "id": "Phone_ef7fy5_1794508399376_t936r",
+      "content": "{\"title\":\"Hsusjwba\",\"body\":\"Ishanna\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794508399376,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 12
+    },
+    "Phone_test123_rec1": {
+      "id": "Phone_test123_rec1",
+      "content": "{\"title\":\"Test Sync\",\"body\":\"Help needed\",\"priority\":\"Critical\",\"status\":\"To do\",\"location\":\"Sector 9\"}",
+      "updatedAt": 1794508900000,
+      "deleted": 0,
+      "deviceId": "Phone_test123",
+      "seq": 16
+    },
+    "Phone_field_alpha_rec1": {
+      "id": "Phone_field_alpha_rec1",
+      "content": "{\"title\":\"Medical Supplies Needed\",\"body\":\"First aid kits and oxygen tanks required immediately\",\"priority\":\"Critical\",\"status\":\"Doing\",\"location\":\"Zone B Hospital\"}",
+      "updatedAt": 1794583676114,
+      "deleted": 0,
+      "deviceId": "Phone_field_alpha",
+      "seq": 17
+    },
+    "rec_live_test_001": {
+      "id": "rec_live_test_001",
+      "content": "{\"title\":\"Live Test Verification Record\",\"body\":\"Field verification sync completed smoothly.\",\"priority\":\"High\",\"status\":\"Doing\",\"location\":\"Command Center\"}",
+      "updatedAt": 1794589516383,
+      "deleted": 0,
+      "deviceId": "Phone_verification_live",
+      "seq": 18
+    },
+    "Phone_ef7fy5_1794589775105_xkitg": {
+      "id": "Phone_ef7fy5_1794589775105_xkitg",
+      "content": "{\"title\":\"Hello_test\",\"body\":\"Xyz\",\"priority\":\"Critical\",\"status\":\"Done\",\"location\":\"Del\"}",
+      "updatedAt": 1794589797266,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "seq": 20
+    }
+  },
+  "versions": {
+    "Phone_test123_rec1_1794508900000_Phone_test123": {
+      "recordId": "Phone_test123_rec1",
+      "content": "{\"title\":\"Test Sync\",\"body\":\"Help needed\",\"priority\":\"Critical\",\"status\":\"To do\",\"location\":\"Sector 9\"}",
+      "updatedAt": 1794508900000,
+      "deviceId": "Phone_test123",
+      "id": "Phone_test123_rec1_1794508900000_Phone_test123",
+      "seq": 1
+    },
+    "Phone_field_alpha_rec1_1794583676114_Phone_field_alpha": {
+      "recordId": "Phone_field_alpha_rec1",
+      "content": "{\"title\":\"Medical Supplies Needed\",\"body\":\"First aid kits and oxygen tanks required immediately\",\"priority\":\"Critical\",\"status\":\"Doing\",\"location\":\"Zone B Hospital\"}",
+      "updatedAt": 1794583676114,
+      "deviceId": "Phone_field_alpha",
+      "id": "Phone_field_alpha_rec1_1794583676114_Phone_field_alpha",
+      "seq": 2
+    },
+    "rec_live_test_001_1794589516383_Phone_verification_live": {
+      "recordId": "rec_live_test_001",
+      "content": "{\"title\":\"Live Test Verification Record\",\"body\":\"Field verification sync completed smoothly.\",\"priority\":\"High\",\"status\":\"Doing\",\"location\":\"Command Center\"}",
+      "updatedAt": 1794589516383,
+      "deviceId": "Phone_verification_live",
+      "id": "rec_live_test_001_1794589516383_Phone_verification_live",
+      "seq": 3
+    },
+    "Phone_ef7fy5_1794481245176_cwljp_1794481245176_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794481245176_cwljp_1794481245176_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794481245176_cwljp",
+      "content": "{\"title\":\"Water supply\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794481245176,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 1,
+      "id": "Phone_ef7fy5_1794481245176_cwljp_1794481245176_Phone_ef7fy5",
+      "seq": 4
+    },
+    "TestPhone_1_rec1_1794505496818_Phone_ef7fy5": {
+      "vid": "TestPhone_1_rec1_1794505496818_Phone_ef7fy5",
+      "recordId": "TestPhone_1_rec1",
+      "content": "{\"title\":\"Test Emergency\",\"body\":\"Water needed at Sector 4\",\"priority\":\"Critical\",\"status\":\"To do\",\"location\":\"Sector 4\"}",
+      "updatedAt": 1794505496818,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "action": "deleted",
+      "rid": 3,
+      "id": "TestPhone_1_rec1_1794505496818_Phone_ef7fy5",
+      "seq": 5
+    },
+    "Phone_ef7fy5_1794481245176_cwljp_1794505500022_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794481245176_cwljp_1794505500022_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794481245176_cwljp",
+      "content": "{\"title\":\"Water supply\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794505500022,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "action": "deleted",
+      "rid": 4,
+      "id": "Phone_ef7fy5_1794481245176_cwljp_1794505500022_Phone_ef7fy5",
+      "seq": 6
+    },
+    "Phone_ef7fy5_1794505520097_onsj9_1794505520097_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794505520097_onsj9_1794505520097_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794505520097_onsj9",
+      "content": "{\"title\":\"Test_emergency_1\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Ddn\"}",
+      "updatedAt": 1794505520097,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 5,
+      "id": "Phone_ef7fy5_1794505520097_onsj9_1794505520097_Phone_ef7fy5",
+      "seq": 7
+    },
+    "Phone_ef7fy5_1794505560523_kdps1_1794505560523_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794505560523_kdps1_1794505560523_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794505560523_kdps1",
+      "content": "{\"title\":\"Test_emergency_3\",\"body\":\"Abcdef\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794505560523,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 6,
+      "id": "Phone_ef7fy5_1794505560523_kdps1_1794505560523_Phone_ef7fy5",
+      "seq": 8
+    },
+    "Phone_ef7fy5_1794506669414_sayh0_1794506669414_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794506669414_sayh0_1794506669414_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794506669414_sayh0",
+      "content": "{\"title\":\"Test sub\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
       "updatedAt": 1794506669414,
       "deleted": 0,
       "deviceId": "Phone_ef7fy5",
-      "seq": 7
+      "action": "created",
+      "rid": 7,
+      "id": "Phone_ef7fy5_1794506669414_sayh0_1794506669414_Phone_ef7fy5",
+      "seq": 9
+    },
+    "Phone_ef7fy5_1794505560523_kdps1_1794506677939_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794505560523_kdps1_1794506677939_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794505560523_kdps1",
+      "content": "{\"title\":\"Test_emergency_3\",\"body\":\"Abcdef\",\"priority\":\"Medium\",\"status\":\"Done\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794506677939,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "edited",
+      "rid": 8,
+      "id": "Phone_ef7fy5_1794505560523_kdps1_1794506677939_Phone_ef7fy5",
+      "seq": 10
+    },
+    "Phone_ef7fy5_1794508358631_zd0ic_1794508358631_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794508358631_zd0ic_1794508358631_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794508358631_zd0ic",
+      "content": "{\"title\":\"Test-1\",\"body\":\"Abajsb\",\"priority\":\"High\",\"status\":\"To do\",\"location\":\"\"}",
+      "updatedAt": 1794508358631,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 9,
+      "id": "Phone_ef7fy5_1794508358631_zd0ic_1794508358631_Phone_ef7fy5",
+      "seq": 11
+    },
+    "Phone_ef7fy5_1794508376604_2q7u6_1794508376604_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794508376604_2q7u6_1794508376604_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794508376604_2q7u6",
+      "content": "{\"title\":\"Bahasnnsama\",\"body\":\"Janana\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794508376604,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 10,
+      "id": "Phone_ef7fy5_1794508376604_2q7u6_1794508376604_Phone_ef7fy5",
+      "seq": 12
+    },
+    "Phone_ef7fy5_1794508390222_7lgwg_1794508390222_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794508390222_7lgwg_1794508390222_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794508390222_7lgwg",
+      "content": "{\"title\":\"Hzhajabab\",\"body\":\"Ishebaaii\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Bsjan\"}",
+      "updatedAt": 1794508390222,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 11,
+      "id": "Phone_ef7fy5_1794508390222_7lgwg_1794508390222_Phone_ef7fy5",
+      "seq": 13
+    },
+    "Phone_ef7fy5_1794508399376_t936r_1794508399376_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794508399376_t936r_1794508399376_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794508399376_t936r",
+      "content": "{\"title\":\"Hsusjwba\",\"body\":\"Ishanna\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794508399376,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 12,
+      "id": "Phone_ef7fy5_1794508399376_t936r_1794508399376_Phone_ef7fy5",
+      "seq": 14
+    },
+    "Phone_ef7fy5_1794505520097_onsj9_1794508502264_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794505520097_onsj9_1794508502264_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794505520097_onsj9",
+      "content": "{\"title\":\"Test_emergency_1\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Ddn\"}",
+      "updatedAt": 1794508502264,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "action": "deleted",
+      "rid": 13,
+      "id": "Phone_ef7fy5_1794505520097_onsj9_1794508502264_Phone_ef7fy5",
+      "seq": 15
+    },
+    "Phone_ef7fy5_1794506669414_sayh0_1794508508495_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794506669414_sayh0_1794508508495_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794506669414_sayh0",
+      "content": "{\"title\":\"Test sub\",\"body\":\"Abcd\",\"priority\":\"Medium\",\"status\":\"To do\",\"location\":\"Delh\"}",
+      "updatedAt": 1794508508495,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "action": "deleted",
+      "rid": 14,
+      "id": "Phone_ef7fy5_1794506669414_sayh0_1794508508495_Phone_ef7fy5",
+      "seq": 16
+    },
+    "Phone_ef7fy5_1794505560523_kdps1_1794508512234_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794505560523_kdps1_1794508512234_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794505560523_kdps1",
+      "content": "{\"title\":\"Test_emergency_3\",\"body\":\"Abcdef\",\"priority\":\"Medium\",\"status\":\"Done\",\"location\":\"Delhi\"}",
+      "updatedAt": 1794508512234,
+      "deleted": 1,
+      "deviceId": "Phone_ef7fy5",
+      "action": "deleted",
+      "rid": 15,
+      "id": "Phone_ef7fy5_1794505560523_kdps1_1794508512234_Phone_ef7fy5",
+      "seq": 17
+    },
+    "Phone_ef7fy5_1794589775105_xkitg_1794589775105_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794589775105_xkitg_1794589775105_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794589775105_xkitg",
+      "content": "{\"title\":\"Hello_test\",\"body\":\"Xyz\",\"priority\":\"Critical\",\"status\":\"Doing\",\"location\":\"Del\"}",
+      "updatedAt": 1794589775105,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "created",
+      "rid": 19,
+      "id": "Phone_ef7fy5_1794589775105_xkitg_1794589775105_Phone_ef7fy5",
+      "seq": 18
+    },
+    "Phone_ef7fy5_1794589775105_xkitg_1794589797266_Phone_ef7fy5": {
+      "vid": "Phone_ef7fy5_1794589775105_xkitg_1794589797266_Phone_ef7fy5",
+      "recordId": "Phone_ef7fy5_1794589775105_xkitg",
+      "content": "{\"title\":\"Hello_test\",\"body\":\"Xyz\",\"priority\":\"Critical\",\"status\":\"Done\",\"location\":\"Del\"}",
+      "updatedAt": 1794589797266,
+      "deleted": 0,
+      "deviceId": "Phone_ef7fy5",
+      "action": "edited",
+      "rid": 20,
+      "id": "Phone_ef7fy5_1794589775105_xkitg_1794589797266_Phone_ef7fy5",
+      "seq": 19
     }
-  }
+  },
+  "versionSeqCounter": 19
 }

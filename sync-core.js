@@ -1,5 +1,5 @@
 /**
- * SyncNest Pure Merge Engine (Deterministic Last-Write-Wins)
+ * SyncNest Pure Merge Engine (Deterministic LWW + Version History)
  */
 
 function mergeChanges(masterMap, incomingChanges, serverSeqCounter) {
@@ -41,7 +41,42 @@ function getChangesSince(masterMap, lastSeq) {
   );
 }
 
+// Append-only version snapshot merge (never overwrites history)
+function mergeVersions(versionMap, incomingVersions, serverVersionSeqCounter) {
+  let versionSeqCounter = serverVersionSeqCounter;
+
+  for (const incoming of incomingVersions) {
+    if (!incoming || typeof incoming !== 'object') continue;
+
+    const versionKey =
+      incoming.id ||
+      `${incoming.recordId || 'rec'}_${incoming.updatedAt || incoming.createdAt || Date.now()}_${incoming.deviceId || 'unknown'}`;
+
+    if (!versionMap[versionKey]) {
+      versionSeqCounter += 1;
+      versionMap[versionKey] = {
+        ...incoming,
+        id: versionKey,
+        seq: versionSeqCounter
+      };
+    }
+  }
+
+  return {
+    updatedVersionMap: versionMap,
+    newVersionSeqCounter: versionSeqCounter
+  };
+}
+
+function getVersionsSince(versionMap, lastVersionSeq) {
+  return Object.values(versionMap).filter(
+    (v) => v.seq > Number(lastVersionSeq)
+  );
+}
+
 module.exports = {
   mergeChanges,
-  getChangesSince
+  getChangesSince,
+  mergeVersions,
+  getVersionsSince
 };
