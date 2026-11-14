@@ -7,6 +7,14 @@ let currentSearch = '';
 let cachedRecords = [];
 let cachedVersions = [];
 let cachedStatus = { activeDevices: [], deviceLastSeen: {}, recentEvents: [] };
+let cachedDevices = {};
+let cachedPresence = [];
+
+function getDeviceName(id) {
+  if (!id) return 'Unknown';
+  if (id === 'Laptop-PC' || id === 'HUB') return 'Laptop-PC (HUB)';
+  return cachedDevices[id]?.deviceName || id;
+}
 
 function escapeHtml(str) {
   return String(str ?? '')
@@ -147,7 +155,7 @@ function openDeviceModal(deviceId) {
     (ev) => ev.deviceId === deviceId || (isHub && (ev.deviceId === 'Laptop-PC' || ev.type === 'SYS' || ev.type === 'OK'))
   );
 
-  document.getElementById('devmodal-title').textContent = isHub ? 'Laptop-PC (HUB)' : deviceId;
+  document.getElementById('devmodal-title').textContent = isHub ? 'Laptop-PC (HUB)' : getDeviceName(deviceId);
   document.getElementById('devmodal-subtitle').textContent = isHub ? 'Central Coordinator Telemetry' : 'Field Worker Telemetry';
   document.getElementById('devmodal-id').textContent = deviceId;
   document.getElementById('devmodal-role').textContent = roleText;
@@ -369,7 +377,7 @@ function renderDevices(activeDevices = [], deviceLastSeen = {}) {
               <span class="signal-dot-ping"></span>
             </div>
             <div class="device-text-meta">
-              <div class="device-id-title">${escapeHtml(id)}</div>
+              <div class="device-id-title">${escapeHtml(getDeviceName(id))}</div>
               <div class="device-sync-time">${escapeHtml(timeText)}</div>
             </div>
           </div>
@@ -402,8 +410,8 @@ function renderCard(rec) {
   }
 
   const isHighlighted = (highlightedUntil.get(rec.id) || 0) > Date.now();
+  const editors = cachedPresence.filter((p) => p.recordId === rec.id);
   const priority = content.priority || 'Medium';
-
   // Count versions for this record
   const matchingVersions = cachedVersions.filter(
     (v) =>
@@ -417,6 +425,7 @@ function renderCard(rec) {
     <article class="report-card priority-${escapeHtml(priority)} ${isHighlighted ? 'card-updated just-updated' : ''}" data-id="${escapeHtml(rec.id)}">
       <div class="card-top-row">
         <h3 class="card-title-text">${escapeHtml(content.title || 'Untitled Record')}</h3>
+        ${editors.length > 0 ? `<span class="badge-editing">✏️ ${escapeHtml(editors.map((e) => e.deviceName || e.deviceId).join(', '))} editing</span>` : ''}
         <div class="card-badges-wrap">
           ${isHighlighted ? '<span class="badge-just-updated">Just updated</span>' : ''}
           <span class="card-priority-pill pill-${escapeHtml(priority)}">${escapeHtml(priority)}</span>
@@ -428,7 +437,7 @@ function renderCard(rec) {
       ${content.body ? `<p class="card-body-text">${escapeHtml(content.body)}</p>` : ''}
       <div class="card-footer-meta">
         <span>📍 ${escapeHtml(content.location || 'Unspecified')}</span>
-        <span>${escapeHtml(rec.deviceId)} · ${formatRelativeTime(rec.updatedAt)}</span>
+        <span>${escapeHtml(getDeviceName(rec.deviceId))} · ${formatRelativeTime(rec.updatedAt)}</span>
       </div>
     </article>
   `;
@@ -514,7 +523,7 @@ function renderTerminal(recentEvents = []) {
           <div class="term-row">
             <span class="term-ts">${timeStr}</span>
             <span class="term-tag ${tagClass}">[${escapeHtml(tag)}]</span>
-            <span class="term-dev">${escapeHtml(ev.deviceId)}:</span>
+            <span class="term-dev">${escapeHtml(getDeviceName(ev.deviceId))}:</span>
             <span class="term-msg">${msg}</span>
           </div>
         `;
@@ -532,19 +541,32 @@ function renderTerminal(recentEvents = []) {
 // ---------------- LIVE POLLING LOOP ----------------
 async function updateDashboard() {
   try {
-    const [statusRes, recordsRes, versionsRes] = await Promise.all([
+    const [statusRes, recordsRes, versionsRes, devicesRes, presenceRes] = await Promise.all([
       fetch(`${API_BASE}/status`),
       fetch(`${API_BASE}/records`),
-      fetch(`${API_BASE}/versions`)
+      fetch(`${API_BASE}/versions`),
+      fetch(`${API_BASE}/devices`),
+      fetch(`${API_BASE}/presence`)
     ]);
 
     const status = await statusRes.json();
     const records = await recordsRes.json();
     const versions = await versionsRes.json();
+    const devicesList = await devicesRes.json();
+    const presenceList = await presenceRes.json();
 
     cachedRecords = records;
     cachedVersions = Array.isArray(versions) ? versions : Object.values(versions || {});
     cachedStatus = status;
+    cachedPresence = Array.isArray(presenceList) ? presenceList : [];
+
+    const devMap = {};
+    if (Array.isArray(devicesList)) {
+      devicesList.forEach((d) => {
+        if (d && d.deviceId) devMap[d.deviceId] = d;
+      });
+    }
+    cachedDevices = devMap;
 
     // Detect changes to trigger teal border glow
     let hasRecordUpdates = false;
@@ -563,7 +585,7 @@ async function updateDashboard() {
       if (status.recentEvents && status.recentEvents.length > 0) {
         const latest = status.recentEvents[0];
         if (latest.type !== 'SYS' && latest.type !== 'OK') {
-          showToast(`⚡ ${latest.deviceId} synced (${latest.receivedCount || 0} pushed)`);
+          showToast(`🔄 ${getDeviceName(latest.deviceId)} synced (${latest.receivedCount || 0} pushed)`);
         }
       }
     }
