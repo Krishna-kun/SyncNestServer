@@ -42,6 +42,7 @@ function getLocalIp() {
 // In-memory state loaded from master.json
 let master = {
   seqCounter: 0,
+  devices: {},
   records: {},
   versions: {},
   versionSeqCounter: 0
@@ -73,7 +74,8 @@ if (fs.existsSync(DB_FILE)) {
       seqCounter: Number(parsed.seqCounter || 0),
       records: parsed.records || {},
       versions: parsed.versions || {},
-      versionSeqCounter: Number(parsed.versionSeqCounter || 0)
+      versionSeqCounter: Number(parsed.versionSeqCounter || 0),
+      devices: parsed.devices || {}
     };
     if (master.records) {
       for (const rec of Object.values(master.records)) {
@@ -98,7 +100,96 @@ function saveMaster() {
   const tempFile = `${DB_FILE}.tmp`;
   fs.writeFileSync(tempFile, JSON.stringify(master, null, 2));
   fs.renameSync(tempFile, DB_FILE);
+
 }
+
+// PERMANENT DEVICE REGISTRATION
+
+function registerDevice(deviceId, deviceName) {
+  const cleanId = deviceId.trim();
+  const cleanName =
+    typeof deviceName === 'string' && deviceName.trim()
+      ? deviceName.trim().slice(0, 30)
+      : cleanId;
+
+  master.devices[cleanId] = {
+    deviceId: cleanId,
+    deviceName: cleanName,
+    updatedAt: new Date().toISOString()
+  };
+
+  saveMaster();
+  return master.devices[cleanId];
+}
+
+app.post('/device/register', (req, res) => {
+  const { deviceId, deviceName } = req.body || {};
+
+  if (typeof deviceId !== 'string' || !deviceId.trim()) {
+    return res.status(400).json({ error: 'Invalid device ID' });
+  }
+
+  try {
+    const device = registerDevice(deviceId, deviceName);
+    res.json({ success: true, device });
+  } catch (error) {
+    console.error('Device registration error:', error);
+    res.status(500).json({ error: 'Could not register device' });
+  }
+});
+
+app.get('/devices', (req, res) => {
+  res.json(Object.values(master.devices || {}));
+});
+
+// LIVE EDITING PRESENCE
+
+const editingPresence = new Map();
+const PRESENCE_TIMEOUT = 15000;
+
+app.post('/presence', (req, res) => {
+  const { deviceId, deviceName, recordId, editing } = req.body || {};
+
+  if (
+    typeof deviceId !== 'string' ||
+    !deviceId.trim() ||
+    typeof recordId !== 'string' ||
+    !recordId.trim()
+  ) {
+    return res.status(400).json({ error: 'Invalid presence payload' });
+  }
+
+  const cleanId = deviceId.trim();
+
+  if (editing) {
+    const registeredDevice = master.devices[cleanId];
+    editingPresence.set(cleanId, {
+      deviceId: cleanId,
+      deviceName:
+        registeredDevice?.deviceName ||
+        (typeof deviceName === 'string' && deviceName.trim()
+          ? deviceName.trim()
+          : cleanId),
+      recordId: recordId.trim(),
+      lastSeen: Date.now()
+    });
+  } else {
+    editingPresence.delete(cleanId);
+  }
+
+  res.json({ success: true });
+});
+
+app.get('/presence', (req, res) => {
+  const now = Date.now();
+  for (const [id, device] of editingPresence.entries()) {
+    if (now - device.lastSeen > PRESENCE_TIMEOUT) {
+      editingPresence.delete(id);
+    }
+  }
+  res.json(Array.from(editingPresence.values()));
+});
+
 
 // Asynchronous FIFO queue to serialize sync requests one at a time
 let syncQueue = Promise.resolve();
